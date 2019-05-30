@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include <string>
 
 
 using namespace std;
@@ -22,15 +23,15 @@ exp_Node* create_exp_tree(int linenum,int type){//创建exp_Node中prim类型的
     switch (type) {
         case 0://ID
             temp->info.prim_info.type2 = ID;
-            temp->info.prim_info.detail.val = "";
+            temp->info.prim_info.detail.val = NULL;
             //在返回后需要手动把ID连上去，也可能到时候再单独写一个函数
             break;
         case 1://TRUE
-            temp->info.prim_info.type2 = TRUE;
-            temp->info.prim_info.detail.val = "";
+            temp->info.prim_info.type2 = t_TRUE;
+            temp->info.prim_info.detail.val = NULL;
         case 2://FASLE
-            temp->info.prim_info.type2 = FALSE;
-            temp->info.prim_info.detail.val = "";
+            temp->info.prim_info.type2 = t_FALSE;
+            temp->info.prim_info.detail.val = NULL;
         case 3://CONSTANT_INT
             temp->info.prim_info.type2 = CONSTAN_INT;
             int value;
@@ -40,14 +41,15 @@ exp_Node* create_exp_tree(int linenum,int type){//创建exp_Node中prim类型的
                 sscanf(yytext,"%x", &value);
             else//否则10进制
                 value = atoi(yytext);
-            temp->info.prim_info.detail.val=to_string(value);
+            temp->info.prim_info.detail.val = (char*)malloc(sizeof(char)*(to_string(value).size()+1));
+            strcpy(temp->info.prim_info.detail.val,to_string(value).c_str());
             break;
         case 4://CONSTANT_DOUBLE
-            temp->info.prim_info.type2 = CONSTANT_DOUBLE;
+            temp->info.prim_info.type2 = t_CONSTANT_DOUBLE;
             temp->info.prim_info.detail.val = yytext;
         case 5://prim_NA
             temp->info.prim_info.type2 = prim_NA;
-            temp->info.prim_info.detail.val = "";
+            temp->info.prim_info.detail.val = NULL;
             break;
         default:
             return NULL;
@@ -60,12 +62,12 @@ exp_Node* create_exp_tree(int linenum,int type){//创建exp_Node中prim类型的
 
 exp_Node* create_exp_tree(int type){
     exp_Node* temp=(exp_Node*)malloc(sizeof(exp_Node));
-    temp->info.prim_info.detail.val = "";
+    temp->info.prim_info.detail.val = NULL;
     temp->info.prim_info.detail.ID = NULL;
     temp->info.prim_info.detail.exp = NULL;
     temp->info.post_info.arg_list = NULL;
-    temp->info.assig_info.unary_exp = NULL;
-    temp->info.assig_info.assign_exp = NULL;
+    temp->info.assign_info.unary_exp = NULL;
+    temp->info.assign_info.assign_exp = NULL;
     temp->info.logi_or_info.logical_or_exp = NULL;
     temp->info.logi_and_info.logical_and_exp = NULL;
     
@@ -118,6 +120,7 @@ exp_Node* create_exp_tree(int type){
             break;
         case 15:
             temp->type = exp_NA;
+            break;
         default:
             return NULL;
     }
@@ -134,7 +137,7 @@ root_Node* create_root(){
     return temp;
 }
 
-declaration_Node* create_declration_tree(type_specifier_kind type){
+declaration_Node* create_declaration_tree(type_specifier_kind type){
     declaration_Node* temp = (declaration_Node*)malloc(sizeof(declaration_Node));
     temp->type = type;
     temp->decl_list = NULL;
@@ -193,7 +196,7 @@ initializer_Node* create_initializer_tree(int type){
         default:
             return NULL;
     }
-    temp->info.assig_exp = NULL;
+    temp->info.assign_exp = NULL;
     return temp;
 }
 
@@ -240,15 +243,18 @@ stat_Node* create_stat_tree(int type){
             temp->type = LABEL;
             break;
         case 1:
-            temp->type = EXP;
+            temp->type = COMPOUND;
             break;
         case 2:
-            temp->type = SELECT;
+            temp->type = EXP;
             break;
         case 3:
-            temp->type = ITER;
+            temp->type = SELECT;
             break;
         case 4:
+            temp->type = ITER;
+            break;
+        case 5:
             temp->type =JUMP;
             break;
         default:
