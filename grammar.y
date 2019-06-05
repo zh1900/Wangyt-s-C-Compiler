@@ -37,7 +37,6 @@
 
 %type <rootN>  translation_unit external_declaration
 %type <funcN>  function_definition
-%token <IDN> IDENTIFIER
 %type  <IDN> identifier_list
 %type <declarationN> declaration declaration_list
 %type <declaratorN>  declarator init_declarator init_declarator_list
@@ -48,20 +47,21 @@
 %type <statN>  statement labeled_statement compound_statement expression_statement
 %type <statN>  selection_statement iteration_statement jump_statement
 %type <block>  block_item block_item_list
-%token <expN> CONSTANT STRING_LITERAL SIZEOF CONSTANT_INT CONSTANT_DOUBLE TRUE FALSE
 %type <expN> primary_expression postfix_expression argument_expression_list unary_expression
 %type <expN> multiplicative_expression additive_expression shift_expression relational_expression equality_expression
 %type <expN> and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression constant_expression
 %type <expN> assignment_expression expression
-%token <typekind>  CHAR INT DOUBLE VOID BOOL
 %type  <typekind>  type_specifier
 %type  <arykind>   unary_operator
 %type  <assignkind> assignment_operator
+
 %token CASE IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP AND_OP OR_OP
 %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN XOR_ASSIGN OR_ASSIGN TYPE_NAME
 %token ';' ',' ':' '=' '[' ']' '.' '&' '!' '~' '-' '+' '*' '/' '%' '<' '>' '^' '|' '?' '{' '}' '(' ')'
-
+%token <IDN> IDENTIFIER
+%token <expN> CONSTANT STRING_LITERAL SIZEOF CONSTANT_INT CONSTANT_DOUBLE TRUE FALSE
+%token <typekind>  CHAR INT DOUBLE VOID BOOL
 %nonassoc LOWER_THAN_ELSE
 %nonassoc ELSE
 %%
@@ -156,8 +156,8 @@ argument_expression_list:
 assignment_expression{
     $$ = create_exp_tree(14);
     $$->info.argument_info.type2 = SINGLE;
-    $$->info.argument_info.argu_exp = $1;
-    $$->info.argument_info.assig_exp = NULL;
+    $$->info.argument_info.argu_exp = NULL;
+    $$->info.argument_info.assig_exp = $1;
     $$->line = $1->line;
 }
 |     argument_expression_list ',' assignment_expression {
@@ -1062,16 +1062,16 @@ void yyerror(char const *s)
 
 int main(int argc,char* argv[]) {
     
-    yyin = fopen(argv[1],"r");
+    yyin = fopen("/Users/egoist/Desktop/test.c","r");
     
     //freopen("output/output.txt","w", stdout);
     yyparse();
     printf("\n");
-    eval(root,0);    //输出语法分析树
+    //eval(root,0);    //输出语法分析树
     
-    Praser praser(root);
+    parser parser(root);
     
-    freeGramTree(root);
+    //freeGramTree(root);
     
     fclose(yyin);
     return 0;

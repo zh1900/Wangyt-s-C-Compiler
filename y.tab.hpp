@@ -141,9 +141,9 @@
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-#include "enums_type.h"
+#include "enums_type.hpp"
 typedef union YYSTYPE
-#line 21 "compiler.y"
+#line 20 "compiler.y"
 {
     struct root_Node* rootN;
     struct func_Node* funcN;
