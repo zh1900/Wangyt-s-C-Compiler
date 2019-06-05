@@ -3369,7 +3369,7 @@ void yyerror(char const *s)
 
 
 int main(int argc,char* argv[]) {
-    yyin = fopen("/Users/egoist/Desktop/test.c","r");
+    yyin = fopen("test.c","r");
     
     //freopen("output/output.txt","w", stdout);
     yyparse();

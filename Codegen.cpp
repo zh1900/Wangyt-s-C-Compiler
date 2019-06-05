@@ -283,7 +283,7 @@ string codegen::translate(vector<string>& line){
 }
 
 void codegen::Generate(){
-    ifstream in("/Users/egoist/Desktop/source code/C_compiler(2)/DerivedData/C_compiler(2)/Build/Products/Debug/innerCode.txt");
+    ifstream in("innerCode.txt");
     // istreambuf_iterator<char> beg(in), end;
     //string Inter(beg, end);//鎴栬€卻tring st;st.assign(beg,end);
     string Inter;
@@ -292,21 +292,21 @@ void codegen::Generate(){
     fout<<".data"<<endl;
     fout<<".globl main"<<endl;
     fout<<".text"<<endl;
-    fout<<"read:"<<endl;
-    fout<<"    li $v0, 4"<<endl;
-    fout<<"    la $a0,_prompt"<<endl;
-    fout<<"    syscall"<<endl;
-    fout<<"    li $v0,5"<<endl;
-    fout<<"    syscall"<<endl;
-    fout<<"    jr $ra"<<endl;
-    fout<<"print:"<<endl;
-    fout<<"    li $v0,1"<<endl;
-    fout<<"    syscall"<<endl;
-    fout<<"    li $v0,4"<<endl;
-    fout<<"    la $a0,_ret"<<endl;
-    fout<<"    syscall"<<endl;
-    fout<<"    move $v0,$0"<<endl;
-    fout<<"    jr $ra"<<endl;
+    // fout<<"read:"<<endl;
+    // fout<<"    li $v0, 4"<<endl;
+    // fout<<"    la $a0,_prompt"<<endl;
+    // fout<<"    syscall"<<endl;
+    // fout<<"    li $v0,5"<<endl;
+    // fout<<"    syscall"<<endl;
+    // fout<<"    jr $ra"<<endl;
+    // fout<<"print:"<<endl;
+    // fout<<"    li $v0,1"<<endl;
+    // fout<<"    syscall"<<endl;
+    // fout<<"    li $v0,4"<<endl;
+    // fout<<"    la $a0,_ret"<<endl;
+    // fout<<"    syscall"<<endl;
+    // fout<<"    move $v0,$0"<<endl;
+    // fout<<"    jr $ra"<<endl;
     
     
     
